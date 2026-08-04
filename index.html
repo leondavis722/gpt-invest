@@ -917,5 +917,65 @@ footer{border-top:1px solid var(--line-soft);padding:48px 0 40px}
   }
 })();
 </script>
+
+<div id="gate" role="dialog" aria-modal="true" aria-label="Access code required">
+  <div class="gate-card">
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <g stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 2.9 19.9 7.5v5.4"/>
+        <path d="M12 2.9 19.9 7.5v5.4" transform="rotate(120 12 12)"/>
+        <path d="M12 2.9 19.9 7.5v5.4" transform="rotate(240 12 12)"/>
+        <path d="M12 7.4 15.98 9.7v4.6L12 16.6 8.02 14.3V9.7Z" stroke-width="1.85"/>
+      </g>
+    </svg>
+    <h2><b>GPT</b> <span class="dim">Invest</span></h2>
+    <p class="gate-sub">Private preview &mdash; enter the access code</p>
+    <form id="gateForm">
+      <input id="gpw" type="password" inputmode="numeric" placeholder="Access code"
+        aria-label="Access code" autocomplete="off" autofocus>
+      <button class="btn btn-primary" type="submit">Enter</button>
+    </form>
+    <p class="gate-err" id="gerr" hidden>Wrong code &mdash; try again.</p>
+  </div>
+</div>
+<style>
+#gate{position:fixed;inset:0;z-index:999;display:grid;place-items:center;background:var(--bg);padding:24px}
+.gate-card{width:min(360px,92vw);text-align:center;border:1px solid var(--line);
+  border-radius:var(--r-3xl);padding:38px 30px;background:var(--surface);
+  box-shadow:0 24px 56px -28px rgba(0,0,0,.25)}
+.gate-card>svg{width:40px;height:40px;margin:0 auto 14px}
+.gate-card h2{font-size:1.5rem;letter-spacing:-.035em;margin-bottom:4px}
+.gate-card h2 b{font-weight:600}
+.gate-sub{font-size:.875rem;color:var(--text-3);margin-bottom:22px}
+#gateForm{display:grid;gap:10px}
+#gpw{height:50px;text-align:center;border-radius:var(--r-xl);border:1px solid var(--line);
+  background:var(--bg);color:var(--text);font-size:1.05rem;letter-spacing:.3em}
+#gpw::placeholder{letter-spacing:0;color:var(--text-3)}
+#gpw:focus{outline:none;border-color:var(--text-3);
+  box-shadow:0 0 0 3px color-mix(in srgb,var(--text) 7%,transparent)}
+.gate-err{margin-top:12px;font-size:.8125rem;color:var(--down)}
+html.locked{overflow:hidden}
+</style>
+<script>
+(function(){
+  var g=document.getElementById('gate');
+  try{if(sessionStorage.getItem('gi-gate')==='1'){g.remove();return}}catch(_){}
+  document.documentElement.classList.add('locked');
+  document.getElementById('gateForm').addEventListener('submit',function(e){
+    e.preventDefault();
+    var f=document.getElementById('gpw');
+    if(f.value.trim()==='333'){
+      try{sessionStorage.setItem('gi-gate','1')}catch(_){}
+      g.style.transition='opacity .35s ease';g.style.opacity='0';
+      document.documentElement.classList.remove('locked');
+      setTimeout(function(){g.remove()},380);
+    }else{
+      document.getElementById('gerr').hidden=false;
+      f.value='';f.focus();
+    }
+  });
+})();
+</script>
+
 </body>
 </html>
