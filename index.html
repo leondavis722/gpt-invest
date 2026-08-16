@@ -1358,6 +1358,14 @@ footer{border-top:1px solid var(--line-soft);padding:48px 0 40px}
     slots.forEach(function(s){s.el.innerHTML=d[s.key]||s.orig});
     langSel.value=l;
     try{localStorage.setItem('gi-lang',l)}catch(_){}
+    /* keep ?lang= in the address bar in sync, so the link is always shareable */
+    try{
+      if(history.replaceState){
+        var u=new URL(location.href);
+        if(l==='en'&&!u.searchParams.has('lang')){/* keep the bare URL clean */}
+        else{u.searchParams.set('lang',l);history.replaceState(null,'',u)}
+      }
+    }catch(_){}
   }
   langSel.addEventListener('change',function(){applyLang(this.value)});
   /* ?lang=xx in the URL wins over the saved preference (aliases: cz→cs, jp→ja, pt→pt-pt) */
