@@ -1360,9 +1360,20 @@ footer{border-top:1px solid var(--line-soft);padding:48px 0 40px}
     try{localStorage.setItem('gi-lang',l)}catch(_){}
   }
   langSel.addEventListener('change',function(){applyLang(this.value)});
+  /* ?lang=xx in the URL wins over the saved preference (aliases: cz→cs, jp→ja, pt→pt-pt) */
+  var qLang=null;
+  try{
+    qLang=(new URLSearchParams(location.search).get('lang')||'').toLowerCase()||null;
+    if(qLang){
+      var ALIAS={cz:'cs',jp:'ja',pt:'pt-pt',br:'pt-br',pt_br:'pt-br',pt_pt:'pt-pt',gb:'en',us:'en'};
+      qLang=ALIAS[qLang]||qLang;
+      if(qLang!=='en'&&!I18N[qLang])qLang=null;
+    }
+  }catch(_){}
   var savedLang='en';
   try{savedLang=localStorage.getItem('gi-lang')||'en'}catch(_){}
-  if(savedLang!=='en')applyLang(savedLang);
+  var initLang=qLang||savedLang;
+  if(initLang!=='en'||qLang==='en')applyLang(initLang);
 
   /* ── live prices — crypto via CoinGecko, stocks via Finnhub; refresh every 5 min ── */
   var FINNHUB_KEY='da0dg49r01qh1non02qgda0dg49r01qh1non02r0';
