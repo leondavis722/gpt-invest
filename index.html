@@ -331,6 +331,16 @@ header{position:sticky;top:0;z-index:60;
 .cmp .yes{color:var(--up)}
 .cmp .no{color:var(--text-3)}
 .cmp svg{width:16px;height:16px;flex:none}
+/* mobile: no horizontal scroll — capability on top, the three verdicts beneath it */
+@media(max-width:700px){
+  .cmp-scroll{overflow:visible}
+  .cmp{min-width:0}
+  .cmp-row{grid-template-columns:repeat(3,1fr)}
+  .cmp-row .cap{grid-column:1/-1;padding:13px 16px 2px;font-size:.875rem;line-height:1.45}
+  .cmp-row>div:nth-child(n+2){padding:6px 6px 13px;justify-content:center}
+  .cmp-head>div:first-child{display:none}
+  .cmp-head>div{padding:10px 6px;font-size:.59375rem;justify-content:center;text-align:center}
+}
 
 /* ── returns calculator ── */
 .calc{max-width:760px;margin-inline:auto;border:1px solid var(--line);border-radius:var(--r-3xl);
